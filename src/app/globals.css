@@ -1,26 +1,187 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Coaction design tokens.
+ * gold-ink is the gold used for small text on light surfaces: the brand gold
+ * (#B99242) does not reach AA contrast as text on white or ivory.
+ */
+@theme {
+  --color-navy: #0c2038;
+  --color-navy-700: #16304f;
+  --color-navy-600: #24426a;
+  --color-gold: #b99242;
+  --color-gold-ink: #7a5a1a;
+  --color-gold-soft: #d8bd80;
+  --color-ivory: #f7f5f0;
+  --color-charcoal: #1d2935;
+  --color-slate: #57616c;
+  --color-line: #dfe4e8;
+  --color-line-strong: #c3cbd2;
+  /* Form control boundaries: at least 3:1 against white and ivory. */
+  --color-field: #76828e;
+  --color-error: #a32020;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --text-display: clamp(2.125rem, 1.3rem + 3.3vw, 3.5rem);
+  --text-display--line-height: 1.06;
+  --text-display--letter-spacing: -0.028em;
+  --text-h1: clamp(2rem, 1.45rem + 2.3vw, 3.125rem);
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.024em;
+  --text-h2: clamp(1.625rem, 1.3rem + 1.35vw, 2.375rem);
+  --text-h2--line-height: 1.16;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.1875rem, 1.12rem + 0.3vw, 1.375rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.012em;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+
+  --container-site: 77.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background: var(--color-white);
+    color: var(--color-charcoal);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-navy);
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-gold-soft);
+  }
+
+  ::selection {
+    background: var(--color-navy);
+    color: var(--color-white);
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-site {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .section {
+    padding-block: clamp(4rem, 2.6rem + 5.6vw, 7.5rem);
+  }
+
+  .section-tight {
+    padding-block: clamp(3rem, 2.2rem + 3.4vw, 5rem);
+  }
+
+  /* Small uppercase label that introduces a section. */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--color-gold-ink);
+  }
+
+  .eyebrow::before {
+    content: "";
+    flex: none;
+    width: 2rem;
+    height: 2px;
+    background: var(--color-gold);
+  }
+
+  .on-dark .eyebrow {
+    color: var(--color-gold-soft);
+  }
+
+  /* Inline text link with a visible underline. */
+  .text-link {
+    color: var(--color-navy);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-gold);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 150ms ease;
+  }
+
+  .text-link:hover {
+    text-decoration-color: var(--color-navy);
+  }
+
+  .on-dark .text-link {
+    color: var(--color-white);
+  }
+
+  .on-dark .text-link:hover {
+    text-decoration-color: var(--color-white);
+  }
 }
